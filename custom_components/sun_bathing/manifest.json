@@ -1,0 +1,11 @@
+{
+  "domain": "sun_bathing",
+  "name": "Sun Bathing",
+  "codeowners": ["@dyslexicdogo"],
+  "config_flow": true,
+  "documentation": "https://github.com/dyslexicdogo/sun_bathing",
+  "issue_tracker": "https://github.com/dyslexicdogo/sun_bathing/issues",
+  "iot_class": "cloud_polling",
+  "requirements": [],
+  "version": "0.1.0"
+}

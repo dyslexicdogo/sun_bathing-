@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+set -e
+cd "$(dirname "$0")/.."
+
+mkdir -p config
+if [ ! -f config/configuration.yaml ]; then
+  cat > config/configuration.yaml <<'EOF'
+default_config:
+logger:
+  default: info
+  logs:
+    custom_components.sun_bathing: debug
+EOF
+fi
+
+ln -sf "$(pwd)/custom_components" config/custom_components
+
+hass -c config

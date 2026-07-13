@@ -1,0 +1,10 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Set up Sun Bathing",
+        "description": "Placeholder setup — click Submit to confirm the integration loads."
+      }
+    }
+  }
+}
