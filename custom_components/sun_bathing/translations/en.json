@@ -3,8 +3,12 @@
     "step": {
       "user": {
         "title": "Set up Sun Bathing",
-        "description": "Placeholder setup — click Submit to confirm the integration loads."
+        "description": "Enter your location for sun bathing calculations.",
+        "data": {
+          "latitude": "Latitude",
+          "longitude": "Longitude"
       }
     }
   }
+}
 }
