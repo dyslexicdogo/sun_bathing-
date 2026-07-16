@@ -13,6 +13,6 @@ logger:
 EOF
 fi
 
-ln -sf "$(pwd)/custom_components" config/custom_components
+ln -sfn "$(pwd)/custom_components" config/custom_components
 
 hass -c config

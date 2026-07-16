@@ -2,3 +2,24 @@
 
 DOMAIN = "sun_bathing"
 OPEN_METEO_URL = "https://api.open-meteo.com/v1/forecast"
+
+CONF_MIN_APPARENT_TEMP_C = "min_apparent_temp_c"
+CONF_MAX_CLOUD_PCT = "max_cloud_pct"
+CONF_MIN_DIRECT_RADIATION = "min_direct_radiation"
+CONF_MAX_WIND_SPEED_KMH = "max_wind_speed_kmh"
+CONF_MAX_WIND_GUST_KMH = "max_wind_gust_kmh"
+CONF_MIN_UV_INDEX = "min_uv_index"
+
+CONF_APPARENT_TEMP_RANGE = "apparent_temp_range"
+CONF_CLOUD_RANGE = "cloud_range"
+CONF_RADIATION_RANGE = "radiation_range"
+CONF_WIND_SPEED_RANGE = "wind_speed_range"
+CONF_WIND_GUST_RANGE = "wind_gust_range"
+CONF_UV_RANGE = "uv_range"
+
+CONF_WEIGHT_APPARENT_TEMP = "weight_apparent_temp"
+CONF_WEIGHT_CLOUD_COVER = "weight_cloud_cover"
+CONF_WEIGHT_DIRECT_RADIATION = "weight_direct_radiation"
+CONF_WEIGHT_WIND_SPEED = "weight_wind_speed"
+CONF_WEIGHT_WIND_GUST = "weight_wind_gust"
+CONF_WEIGHT_UV_INDEX = "weight_uv_index"
