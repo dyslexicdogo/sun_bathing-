@@ -72,3 +72,20 @@ class SunBathingWindowSensor(CoordinatorEntity, SensorEntity):
             if ts.hour == self._start_hour and ts.date() == today:
                 return conditions
         return None
+    
+    @property
+    def extra_state_attributes(self) -> dict:
+        """Expose raw score and underlying weather values for Lovelace/notifications."""
+        conditions = self._pick_todays_conditions()
+        if conditions is None:
+            return {}
+        raw_score = calculate_score(conditions, self._thresholds, self._weights)
+        return {
+            "raw_score": raw_score,
+            "apparent_temperature": conditions.apparent_temperature,
+            "cloud_cover": conditions.cloud_cover,
+            "direct_radiation": conditions.direct_radiation,
+            "wind_speed": conditions.wind_speed,
+            "wind_gusts": conditions.wind_gusts,
+            "uv_index": conditions.uv_index,
+            }

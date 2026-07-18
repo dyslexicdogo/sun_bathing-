@@ -122,3 +122,23 @@ def test_unique_id_and_name_reflect_window(sample_entry_data):
 
     assert sensor.unique_id == "test_entry_id_window_14_15"
     assert sensor.name == "Sunbathing score 14:00-15:00"
+
+def test_extra_state_attributes_contains_all_weather_fields(sample_entry_data):
+    today = date.today()
+    conditions = _make_conditions(
+        apparent_temperature=18.5, cloud_cover=30, direct_radiation=450,
+        wind_speed=12.0, wind_gusts=20.0, uv_index=6.0,
+    )
+    coordinator = FakeCoordinator(
+        data=[(datetime(today.year, today.month, today.day, 13, 0), conditions)]
+    )
+    sensor = _make_sensor(coordinator, start_hour=13, end_hour=14, sample_entry_data=sample_entry_data)
+
+    attrs = sensor.extra_state_attributes
+
+    assert attrs["apparent_temperature"] == 18.5
+    assert attrs["cloud_cover"] == 30
+    assert attrs["direct_radiation"] == 450
+    assert attrs["wind_speed"] == 12.0
+    assert attrs["wind_gusts"] == 20.0
+    assert attrs["uv_index"] == 6.0
