@@ -1,21 +1,39 @@
-"""The Sun Bathing integration."""
-
+"""The sun_bathing integration."""
 from __future__ import annotations
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
+from .client import SunBathingApiClient
 from .const import DOMAIN
+from .coordinator import SunBathingCoordinator
+
+PLATFORMS = ["sensor"]
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    """Set up Sun Bathing from a config entry."""
+    """Set up sun_bathing from a config entry."""
+    session = async_get_clientsession(hass)
+    client = SunBathingApiClient(
+        session,
+        entry.data["latitude"],
+        entry.data["longitude"],
+    )
+
+    coordinator = SunBathingCoordinator(hass, client)
+    await coordinator.async_config_entry_first_refresh()
+
     hass.data.setdefault(DOMAIN, {})
-    hass.data[DOMAIN][entry.entry_id] = {}
+    hass.data[DOMAIN][entry.entry_id] = coordinator
+
+    await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     return True
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Unload a config entry."""
-    hass.data[DOMAIN].pop(entry.entry_id, None)
-    return True
+    unload_ok = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
+    if unload_ok:
+        hass.data[DOMAIN].pop(entry.entry_id)
+    return unload_ok
