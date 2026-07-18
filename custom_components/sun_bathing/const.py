@@ -23,3 +23,5 @@ CONF_WEIGHT_DIRECT_RADIATION = "weight_direct_radiation"
 CONF_WEIGHT_WIND_SPEED = "weight_wind_speed"
 CONF_WEIGHT_WIND_GUST = "weight_wind_gust"
 CONF_WEIGHT_UV_INDEX = "weight_uv_index"
+
+WINDOW_START_HOURS = (10, 11, 12, 13, 14, 15, 16)

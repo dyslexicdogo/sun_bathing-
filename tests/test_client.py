@@ -27,7 +27,7 @@ async def test_get_hourly_conditions_parses_response(load_fixture):
             result = await client.async_get_hourly_conditions()
 
     ts, conditions = result[0]
-    assert len(result) == 168
+    assert len(result) == 72
     assert ts.hour == 0
     assert conditions.apparent_temperature == payload["hourly"]["apparent_temperature"][0]
 

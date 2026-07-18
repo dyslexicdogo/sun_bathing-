@@ -35,7 +35,7 @@ class SunBathingApiClient:
         self._latitude = latitude
         self._longitude = longitude
 
-    async def async_get_hourly_conditions(self) -> list[tuple[datetime, HourlyConditions]]:
+    async def async_get_hourly_conditions(self, forecast_days: int = 3) -> list[tuple[datetime, HourlyConditions]]:
         """Fetch today's hourly forecast.
 
         Returns a list of (timestamp, HourlyConditions) tuples, one per hour.
@@ -44,7 +44,7 @@ class SunBathingApiClient:
             "latitude": self._latitude,
             "longitude": self._longitude,
             "hourly": ",".join(HOURLY_FIELDS),
-            "forecast_days": 1,
+            "forecast_days": forecast_days,
             "timezone": "auto",
         }
 
