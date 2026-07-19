@@ -75,17 +75,30 @@ class SunBathingWindowSensor(CoordinatorEntity, SensorEntity):
     
     @property
     def extra_state_attributes(self) -> dict:
-        """Expose raw score and underlying weather values for Lovelace/notifications."""
         conditions = self._pick_todays_conditions()
         if conditions is None:
             return {}
+        
         raw_score = calculate_score(conditions, self._thresholds, self._weights)
+        t = self._thresholds
         return {
-            "raw_score": raw_score,
-            "apparent_temperature": conditions.apparent_temperature,
-            "cloud_cover": conditions.cloud_cover,
-            "direct_radiation": conditions.direct_radiation,
-            "wind_speed": conditions.wind_speed,
-            "wind_gusts": conditions.wind_gusts,
-            "uv_index": conditions.uv_index,
-            }
+        "raw_score": raw_score,
+        "apparent_temperature": conditions.apparent_temperature,
+        "cloud_cover": conditions.cloud_cover,
+        "direct_radiation": conditions.direct_radiation,
+        "wind_speed": conditions.wind_speed,
+        "wind_gusts": conditions.wind_gusts,
+        "uv_index": conditions.uv_index,
+        "min_apparent_temp_c": t.min_apparent_temp_c,
+        "apparent_temp_range": t.apparent_temp_range,
+        "max_cloud_pct": t.max_cloud_pct,
+        "cloud_range": t.cloud_range,
+        "min_direct_radiation": t.min_direct_radiation,
+        "radiation_range": t.radiation_range,
+        "max_wind_speed_kmh": t.max_wind_speed_kmh,
+        "wind_speed_range": t.wind_speed_range,
+        "max_wind_gust_kmh": t.max_wind_gust_kmh,
+        "wind_gust_range": t.wind_gust_range,
+        "min_uv_index": t.min_uv_index,
+        "uv_range": t.uv_range,
+    }
