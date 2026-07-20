@@ -1,5 +1,5 @@
 """Tests for sun_bathing sensor entities."""
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 
 import pytest
 
@@ -142,3 +142,40 @@ def test_extra_state_attributes_contains_all_weather_fields(sample_entry_data):
     assert attrs["wind_speed"] == 12.0
     assert attrs["wind_gusts"] == 20.0
     assert attrs["uv_index"] == 6.0
+
+def test_extra_state_attributes_includes_3_day_forecast(sample_entry_data):
+    today = date.today()
+    tomorrow = today + timedelta(days=1)
+    day_plus_2 = today + timedelta(days=2)
+
+    coordinator = FakeCoordinator(data=[
+        (datetime(today.year, today.month, today.day, 10, 0), _make_conditions(cloud_cover=10)),
+        (datetime(tomorrow.year, tomorrow.month, tomorrow.day, 10, 0), _make_conditions(cloud_cover=50)),
+        (datetime(day_plus_2.year, day_plus_2.month, day_plus_2.day, 10, 0), _make_conditions(cloud_cover=90)),
+    ])
+    sensor = _make_sensor(coordinator, start_hour=10, end_hour=11, sample_entry_data=sample_entry_data)
+
+    forecast = sensor.extra_state_attributes["forecast"]
+
+    assert len(forecast) == 3
+    assert [f["day_offset"] for f in forecast] == [0, 1, 2]
+    assert all(f["score"] is not None for f in forecast)
+    # cloudier days should score lower for this field, confirming correct day matched
+    assert forecast[0]["cloud_cover"] == 10
+    assert forecast[1]["cloud_cover"] == 50
+    assert forecast[2]["cloud_cover"] == 90
+
+
+def test_forecast_entry_is_none_when_day_missing(sample_entry_data):
+    today = date.today()
+    coordinator = FakeCoordinator(data=[
+        (datetime(today.year, today.month, today.day, 10, 0), _make_conditions()),
+        # tomorrow and day+2 deliberately missing
+    ])
+    sensor = _make_sensor(coordinator, start_hour=10, end_hour=11, sample_entry_data=sample_entry_data)
+
+    forecast = sensor.extra_state_attributes["forecast"]
+
+    assert forecast[0]["score"] is not None
+    assert forecast[1]["score"] is None
+    assert forecast[2]["score"] is None
