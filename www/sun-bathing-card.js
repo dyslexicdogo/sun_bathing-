@@ -102,8 +102,8 @@ class SunBathingCard extends HTMLElement {
           ${cell(tempIcon, tempScore, forecast.apparent_temperature + "°C")}
           ${cell(cloudIcon, cloudScore, forecast.cloud_cover + "%")}
           ${cell(radIcon, radScore, forecast.direct_radiation + "W")}
-          ${cell(windIcon, windScore, forecast.wind_speed + "km/h")}
-          ${cell(gustIcon, gustScore, forecast.wind_gusts + "km/h")}
+          ${cell(windIcon, windScore, Math.round(forecast.wind_speed) + "km/h")}
+          ${cell(gustIcon, gustScore, Math.round(forecast.wind_gusts) + "km/h")}
           <div style="${cellStyle}">
             <div style="width:12px;height:12px;border-radius:50%;background:${this._colorFor(uvScore).fill}"></div>
             <div style="font-size:11px;color:var(--secondary-text-color)">${forecast.uv_index}</div>
