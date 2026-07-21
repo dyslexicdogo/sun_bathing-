@@ -1,0 +1,78 @@
+blueprint:
+  name: Sunbathing Morning Notification
+  description: >
+    Notifies you each morning with today's best sunbathing window,
+    using scores from the sun_bathing integration. Requires the
+    sun_bathing integration's 7 window sensors to be set up first.
+  domain: automation
+  input:
+    window_sensors:
+      name: Sunbathing Window Sensors
+      description: >
+        Select all 7 sun_bathing window score sensors
+        (10am-11am through 4pm-5pm).
+      selector:
+        entity:
+          multiple: true
+          filter:
+            integration: sun_bathing
+    notify_target:
+      name: Notify Service
+      description: The notify service to send the message to.
+      selector:
+        text: {}
+    notify_time:
+      name: Notification Time
+      description: What time to send the morning notification.
+      default: "08:00:00"
+      selector:
+        time: {}
+    min_score:
+      name: Minimum Score to Notify
+      description: >
+        Only send a notification if the best window's score is at least
+        this value. Set to 0 to always notify.
+      default: 40
+      selector:
+        number:
+          min: 0
+          max: 100
+          mode: slider
+
+trigger:
+  - platform: time
+    at: !input notify_time
+
+variables:
+  window_sensors: !input window_sensors
+  min_score: !input min_score
+  best: >
+    {% set ns = namespace(entity=none, score=-1) %}
+    {% for e in window_sensors %}
+      {% set v = states(e) | int(-1) %}
+      {% if v > ns.score %}
+        {% set ns.entity = e %}
+        {% set ns.score = v %}
+      {% endif %}
+    {% endfor %}
+    {{ {'entity': ns.entity, 'score': ns.score} }}
+
+condition:
+  - condition: template
+    value_template: "{{ best.score >= min_score }}"
+
+action:
+  - service: !input notify_target
+    data:
+      title: "☀️ Sunbathing Forecast"
+      message: >
+        Best window today: {{ state_attr(best.entity, 'friendly_name') }},
+        score {{ best.score }}/100.
+        {{ state_attr(best.entity, 'apparent_temperature') }}°C,
+        {{ state_attr(best.entity, 'cloud_cover') }}% cloud,
+        UV {{ state_attr(best.entity, 'uv_index') }}.
+      data:
+        tag: "sunbathing-forecast"
+        channel: "Sunbathing"
+
+mode: single
