@@ -73,7 +73,7 @@ below its threshold.
 ### Setup
 
 1. **Settings → Dashboards → ⋮ → Resources → Add Resource**
-   - URL: `/local/sun-bathing-card.js`
+   - URL: `/sun_bathing/sun-bathing-card.js`
    - Resource type: **JavaScript Module**
 2. Edit any dashboard → **+ Add Card → Manual**, and paste:
    ```yaml
