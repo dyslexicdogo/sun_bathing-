@@ -14,6 +14,5 @@ EOF
 fi
 
 ln -sfn "$(pwd)/custom_components" config/custom_components
-ln -sfn "$(pwd)/www" config/www
 
 hass -c config
