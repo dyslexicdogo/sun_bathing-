@@ -2,8 +2,8 @@
 import re
 from datetime import datetime, timezone
 
-import pytest
 from aioresponses import aioresponses
+from homeassistant.setup import async_setup_component
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.sun_bathing.client import BASE_URL
@@ -49,8 +49,10 @@ def _open_meteo_payload_for_today():
 
 async def test_setup_and_unload_entry(hass, sample_entry_data):
     """Setting up the config entry should create 7 sensor entities with real states."""
-    entry_data = {**sample_entry_data}  # includes latitude/longitude + all 18 threshold/range/weight keys
+    assert await async_setup_component(hass, "http", {})
+    await hass.async_block_till_done()
 
+    entry_data = {**sample_entry_data}  # includes latitude/longitude + all 18 threshold/range/weight keys
     entry = MockConfigEntry(domain=DOMAIN, data=entry_data)
     entry.add_to_hass(hass)
 
